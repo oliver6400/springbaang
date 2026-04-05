@@ -5,6 +5,8 @@ import com.codesfree.prueba.exception.ResourceNotFoundException;
 import com.codesfree.prueba.model.Customer;
 import com.codesfree.prueba.model.Order;
 import com.codesfree.prueba.model.OrderItem;
+import com.codesfree.prueba.model.OrderStatus;
+import com.codesfree.prueba.model.PaymentStatus;
 import com.codesfree.prueba.model.Product;
 import com.codesfree.prueba.model.ProductCategory;
 import com.codesfree.prueba.model.Tenant;
@@ -90,7 +92,8 @@ public class EcommerceService {
         Order order = new Order();
         order.setTenant(findTenant());
         order.setCustomer(customer);
-        order.setStatus("PENDING");
+        order.setStatus(OrderStatus.PENDING);
+        order.setPaymentStatus(PaymentStatus.PENDING);
 
         for (OrderDto.OrderItemDto itemDto : orderDto.getItems()) {
             Product product = productRepository.findById(itemDto.getProductId())
@@ -108,11 +111,12 @@ public class EcommerceService {
             }
         }
 
-        if (order.getTotal() == null || order.getTotal().compareTo(BigDecimal.ZERO) <= 0) {
-            order.setTotal(order.getItems().stream()
+        if (order.getSubtotal() == null || order.getSubtotal().compareTo(BigDecimal.ZERO) <= 0) {
+            order.setSubtotal(order.getItems().stream()
                     .map(OrderItem::getTotalPrice)
                     .reduce(BigDecimal.ZERO, BigDecimal::add));
         }
+        order.setTotal(order.getSubtotal().add(order.getTaxAmount()).add(order.getShippingAmount()));
 
         return orderRepository.save(order);
     }

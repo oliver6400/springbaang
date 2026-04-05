@@ -9,10 +9,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "products")
+@Table(
+    name = "products",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_product_tenant_sku", columnNames = {"tenant_id", "sku"})
+    }
+)
 public class Product {
 
     @Id
@@ -114,4 +120,3 @@ public class Product {
         this.available = available;
     }
 }
-
