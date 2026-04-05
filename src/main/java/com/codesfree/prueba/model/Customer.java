@@ -9,9 +9,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "customers")
+@Table(
+    name = "customers",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_customer_tenant_email", columnNames = {"tenant_id", "email"})
+    }
+)
 public class Customer {
 
     @Id
@@ -28,7 +34,7 @@ public class Customer {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     private String phone;
@@ -111,4 +117,3 @@ public class Customer {
         this.shippingAddress = shippingAddress;
     }
 }
-

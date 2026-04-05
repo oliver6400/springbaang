@@ -11,12 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
-@Table(name = "leads")
-public class Lead {
+@Table(name = "customer_interactions")
+public class CustomerInteraction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,23 +26,18 @@ public class Lead {
     private Tenant tenant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
-    @Column(nullable = false)
-    private String name;
-
-    private String email;
-
-    private String phone;
-
-    private String source;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private LeadStatus status = LeadStatus.NEW;
+    private InteractionType type;
 
-    private BigDecimal leadValue = BigDecimal.ZERO;
+    @Column(nullable = false, length = 250)
+    private String subject;
+
+    @Column(nullable = false, length = 4000)
+    private String content;
 
     @Column(nullable = false)
     private Instant createdAt = Instant.now();
@@ -72,52 +66,28 @@ public class Lead {
         this.customer = customer;
     }
 
-    public String getName() {
-        return name;
+    public InteractionType getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(InteractionType type) {
+        this.type = type;
     }
 
-    public String getEmail() {
-        return email;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getContent() {
+        return content;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public LeadStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LeadStatus status) {
-        this.status = status;
-    }
-
-    public BigDecimal getValue() {
-        return leadValue;
-    }
-
-    public void setValue(BigDecimal value) {
-        this.leadValue = value;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Instant getCreatedAt() {
