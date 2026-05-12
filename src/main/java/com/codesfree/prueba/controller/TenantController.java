@@ -5,6 +5,7 @@ import com.codesfree.prueba.model.Subscription;
 import com.codesfree.prueba.model.Tenant;
 import com.codesfree.prueba.service.TenantService;
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ public class TenantController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPERADMIN', 'ROLE_MODERADOR_LIMITADO')")
     public ResponseEntity<Tenant> createTenant(@RequestBody TenantDto tenantDto) {
         Tenant tenant = new Tenant();
         tenant.setName(tenantDto.getName());
@@ -33,11 +35,13 @@ public class TenantController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPERADMIN', 'ROLE_MODERADOR_LIMITADO')")
     public List<Tenant> listTenants() {
         return tenantService.getAllTenants();
     }
 
     @PostMapping("/{tenantId}/subscriptions")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPERADMIN', 'ROLE_MODERADOR_LIMITADO')")
     public ResponseEntity<Subscription> createSubscription(
             @PathVariable Long tenantId,
             @RequestBody Subscription subscription) {
@@ -45,4 +49,3 @@ public class TenantController {
                 .body(tenantService.createSubscription(tenantId, subscription));
     }
 }
-
