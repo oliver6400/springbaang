@@ -26,7 +26,7 @@ public class TenantController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_SUPERADMIN', 'ROLE_MODERADOR_LIMITADO', 'ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPERADMIN', 'ROLE_MODERADOR_LIMITADO')")
     public ResponseEntity<Tenant> createTenant(@RequestBody TenantDto tenantDto) {
         Tenant tenant = new Tenant();
         tenant.setName(tenantDto.getName());
@@ -35,13 +35,13 @@ public class TenantController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_SUPERADMIN', 'ROLE_MODERADOR_LIMITADO', 'ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPERADMIN', 'ROLE_MODERADOR_LIMITADO')")
     public List<Tenant> listTenants() {
         return tenantService.getAllTenants();
     }
 
     @PostMapping("/{tenantId}/subscriptions")
-    @PreAuthorize("hasAnyAuthority('ROLE_SUPERADMIN', 'ROLE_MODERADOR_LIMITADO', 'ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPERADMIN', 'ROLE_MODERADOR_LIMITADO')")
     public ResponseEntity<Subscription> createSubscription(
             @PathVariable Long tenantId,
             @RequestBody Subscription subscription) {

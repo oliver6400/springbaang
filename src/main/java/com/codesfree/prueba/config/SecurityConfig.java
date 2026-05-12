@@ -32,11 +32,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/bootstrap/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/api/tenants/**").hasAnyAuthority(
-                        "ROLE_SUPERADMIN",
-                        "ROLE_MODERADOR_LIMITADO",
-                        "ROLE_DUENO_EMPRESA",
-                        "ROLE_ADMIN_EMPRESA")
+                .requestMatchers("/api/tenants/**").hasAnyAuthority("ROLE_SUPERADMIN", "ROLE_MODERADOR_LIMITADO")
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().authenticated())
             .httpBasic(httpBasic -> {})

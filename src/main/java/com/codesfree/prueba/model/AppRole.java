@@ -3,8 +3,6 @@ package com.codesfree.prueba.model;
 public enum AppRole {
     ROLE_SUPERADMIN,
     ROLE_MODERADOR_LIMITADO,
-    ROLE_DUENO_EMPRESA,
-    ROLE_ADMIN_EMPRESA,
     ROLE_ADMIN_TIENDA,
     ROLE_ADMIN_TIENDA_LIMITADO,
     ROLE_ENCARGADO_TIENDA,

@@ -27,43 +27,43 @@ public class EcommerceController {
     }
 
     @GetMapping("/products")
-    @PreAuthorize("hasAnyAuthority('ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA', 'ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
     public List<Product> getProducts() {
         return ecommerceService.getAllProducts();
     }
 
     @GetMapping("/products/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA', 'ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
     public Product getProduct(@PathVariable Long id) {
         return ecommerceService.getProduct(id);
     }
 
     @PostMapping("/products")
-    @PreAuthorize("hasAnyAuthority('ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA', 'ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ecommerceService.createProduct(product));
     }
 
     @GetMapping("/categories")
-    @PreAuthorize("hasAnyAuthority('ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA', 'ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
     public List<ProductCategory> getCategories() {
         return ecommerceService.getCategories();
     }
 
     @PostMapping("/categories")
-    @PreAuthorize("hasAnyAuthority('ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA', 'ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA')")
     public ResponseEntity<ProductCategory> createCategory(@RequestBody ProductCategory category) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ecommerceService.createCategory(category));
     }
 
     @PostMapping("/orders")
-    @PreAuthorize("hasAnyAuthority('ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA', 'ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA', 'ROLE_CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA', 'ROLE_CLIENTE')")
     public ResponseEntity<Order> createOrder(@RequestBody OrderDto orderDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ecommerceService.createOrder(orderDto));
     }
 
     @GetMapping("/orders")
-    @PreAuthorize("hasAnyAuthority('ROLE_DUENO_EMPRESA', 'ROLE_ADMIN_EMPRESA', 'ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA', 'ROLE_CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN_TIENDA', 'ROLE_ENCARGADO_TIENDA', 'ROLE_CLIENTE')")
     public List<Order> getOrders() {
         return ecommerceService.getAllOrders();
     }
