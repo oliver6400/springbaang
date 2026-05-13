@@ -1,10 +1,9 @@
 package com.codesfree.prueba.controller;
 
 import com.codesfree.prueba.dto.BootstrapSuperAdminRequest;
+import com.codesfree.prueba.dto.BootstrapSuperAdminResponse;
 import com.codesfree.prueba.service.SuperAdminBootstrapService;
 import jakarta.validation.Valid;
-import java.util.Map;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,10 +21,9 @@ public class BootstrapController {
     }
 
     @PostMapping("/superadmin")
-    public ResponseEntity<Map<String, String>> createFirstSuperAdmin(
+    public ResponseEntity<BootstrapSuperAdminResponse> createFirstSuperAdmin(
             @Valid @RequestBody BootstrapSuperAdminRequest request) {
-        superAdminBootstrapService.createFirstSuperAdmin(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "Superadmin created successfully"));
+        BootstrapSuperAdminResponse createdUser = superAdminBootstrapService.createFirstSuperAdmin(request);
+        return ResponseEntity.ok(createdUser);
     }
 }

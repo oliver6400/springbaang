@@ -1,9 +1,11 @@
 package com.codesfree.prueba.service;
 
 import com.codesfree.prueba.dto.BootstrapSuperAdminRequest;
+import com.codesfree.prueba.dto.BootstrapSuperAdminResponse;
 import com.codesfree.prueba.model.AppRole;
 import com.codesfree.prueba.model.AppUser;
 import com.codesfree.prueba.repository.AppUserRepository;
+import java.time.Instant;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ public class SuperAdminBootstrapService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void createFirstSuperAdmin(BootstrapSuperAdminRequest request) {
+    public BootstrapSuperAdminResponse createFirstSuperAdmin(BootstrapSuperAdminRequest request) {
         if (appUserRepository.existsByRole(AppRole.ROLE_SUPERADMIN)) {
             throw new IllegalStateException("Superadmin already exists. Bootstrap is disabled.");
         }
@@ -31,6 +33,17 @@ public class SuperAdminBootstrapService {
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(AppRole.ROLE_SUPERADMIN);
-        appUserRepository.save(user);
+        user.setActivo(true);
+        user.setCreatedAt(Instant.now());
+        user.setUpdatedAt(user.getCreatedAt());
+        AppUser savedUser = appUserRepository.save(user);
+
+        return new BootstrapSuperAdminResponse(
+                savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getRole().name(),
+                savedUser.getActivo(),
+                savedUser.getCreatedAt(),
+                savedUser.getUpdatedAt());
     }
 }

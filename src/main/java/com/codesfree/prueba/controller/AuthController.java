@@ -8,9 +8,12 @@ import com.codesfree.prueba.dto.RefreshTokenRequest;
 import com.codesfree.prueba.service.RefreshTokenService;
 import jakarta.validation.Valid;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
@@ -31,9 +36,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthTokenResponse login(@Valid @RequestBody AuthLoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                UsernamePasswordAuthenticationToken.unauthenticated(request.getUsername(), request.getPassword()));
-        return refreshTokenService.issueTokens(authentication.getName());
+        log.info("[Auth] login attempt username={}", request.getUsername());
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    UsernamePasswordAuthenticationToken.unauthenticated(request.getUsername(), request.getPassword()));
+            log.info("[Auth] login success username={}", authentication.getName());
+            return refreshTokenService.issueTokens(authentication.getName());
+        } catch (AuthenticationException ex) {
+            log.warn("[Auth] login failed username={} reason={}", request.getUsername(), ex.getMessage());
+            throw ex;
+        }
     }
 
     @PostMapping("/refresh")

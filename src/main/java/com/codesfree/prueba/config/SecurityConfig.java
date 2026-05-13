@@ -5,6 +5,7 @@ import com.codesfree.prueba.service.AppUserDetailsService;
 import java.io.IOException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -42,9 +43,15 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/bootstrap/**", "/api/auth/login", "/api/auth/refresh", "/api/auth/logout",
                         "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/api/tenants/**", "/api/saas/**").hasAuthority("ROLE_SUPERADMIN")
-                .requestMatchers("/api/crm/**").hasAnyAuthority("ROLE_SUPERADMIN", "ROLE_ADMIN")
-                .requestMatchers("/api/ecommerce/**").hasAnyAuthority("ROLE_SUPERADMIN", "ROLE_ADMIN", "ROLE_USER")
+                .requestMatchers(HttpMethod.GET, "/api/saas/planes").permitAll()
+                .requestMatchers("/api/tenants/**").hasAuthority("ROLE_SUPERADMIN")
+                .requestMatchers("/api/saas/dashboard").hasAnyAuthority(
+                        "ROLE_SUPERADMIN", "ROLE_ADMIN_TIENDA", "ROLE_ADMIN_TIENDA_LIMITADO", "ROLE_ENCARGADO_TIENDA")
+                .requestMatchers("/api/saas/**").hasAuthority("ROLE_SUPERADMIN")
+                .requestMatchers("/api/crm/**").hasAnyAuthority(
+                        "ROLE_SUPERADMIN", "ROLE_ADMIN_TIENDA", "ROLE_ADMIN_TIENDA_LIMITADO", "ROLE_ENCARGADO_TIENDA", "ROLE_SOPORTE")
+                .requestMatchers("/api/ecommerce/**").hasAnyAuthority(
+                        "ROLE_SUPERADMIN", "ROLE_ADMIN_TIENDA", "ROLE_ADMIN_TIENDA_LIMITADO", "ROLE_ENCARGADO_TIENDA", "ROLE_CLIENTE")
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().authenticated())
             .exceptionHandling(exceptions -> exceptions
